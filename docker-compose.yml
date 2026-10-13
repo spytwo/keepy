@@ -1,0 +1,6 @@
+services:
+  app:
+    build: .
+    container_name: keepy
+    ports:
+      - "8004:8004"
