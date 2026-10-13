@@ -4,3 +4,6 @@ services:
     container_name: keepy
     ports:
       - "8004:8004"
+    volumes:
+      - ./data:/app/data
+
