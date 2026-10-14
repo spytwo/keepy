@@ -71,7 +71,7 @@ function renderEntries(entries) {
     if (entries.length === 0) {
         const empty = document.createElement("div");
         empty.className = "empty";
-        empty.textContent = "Здесь пока пусто. Сохрани что-нибудь интересное.";
+        empty.textContent = "Здесь пока пусто";
         entriesContainer.append(empty);
         return;
     }
@@ -82,7 +82,20 @@ function renderEntries(entries) {
 
         const text = document.createElement("p");
         text.className = "entry-content";
-        renderContent(text, entry.content);
+
+
+        if (entry.title && /^https?:\/\//i.test(entry.content)) {
+            const link = document.createElement("a");
+            link.href = entry.content;
+            link.textContent = entry.title;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+
+            text.append(link);
+        } else {
+            renderContent(text, entry.content);
+        }
+
 
         const deleteButton = document.createElement("button");
         deleteButton.className = "delete-button";
@@ -91,9 +104,6 @@ function renderEntries(entries) {
         deleteButton.setAttribute("aria-label", "Удалить запись");
 
         deleteButton.addEventListener("click", async () => {
-            if (!confirm("Удалить эту запись?")) {
-                return;
-            }
 
             deleteButton.disabled = true;
 

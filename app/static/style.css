@@ -196,7 +196,6 @@ button span {
     font-size: 14px;
 }
 
-
 .entry-content a {
     color: #6258d9;
     text-decoration: none;
@@ -206,7 +205,6 @@ button span {
 .entry-content a:hover {
     text-decoration: underline;
 }
-
 
 @media (max-width: 480px) {
     .container {

@@ -7,6 +7,7 @@ class EntryCreate(BaseModel):
 
 class EntryRead(BaseModel):
     id: int
+    title: str | None = None
     content: str
 
     model_config = ConfigDict(from_attributes=True)

@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models import Entry
+from app.parser import fetch_title
 from app.schemas import EntryCreate, EntryRead
 
 router = APIRouter(prefix="/entries", tags=["Entries"])
@@ -18,7 +19,15 @@ async def create_entry(
     entry: EntryCreate,
     db: AsyncSession = Depends(get_db),
 ):
-    db_entry = Entry(content=entry.content)
+    title = None
+
+    if entry.content.startswith(("http://", "https://")):
+        title = fetch_title(entry.content)
+
+    db_entry = Entry(
+        content=entry.content,
+        title=title,
+    )
     db.add(db_entry)
     await db.commit()
     await db.refresh(db_entry)
