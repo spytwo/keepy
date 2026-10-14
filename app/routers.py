@@ -1,21 +1,11 @@
-from collections.abc import Generator
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.database import SessionLocal
+from app.dependencies import get_db
 from app.models import Entry
 from app.schemas import EntryCreate, EntryRead
 
 router = APIRouter(prefix="/entries", tags=["Entries"])
-
-
-def get_db() -> Generator[Session]:
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post(
@@ -49,11 +39,8 @@ def delete_entry(
 ):
     entry = db.get(Entry, entry_id)
 
-    if entry is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Entry not found",
-        )
+    if not entry:
+        raise HTTPException(status_code=404, detail="Entry not found")
 
     db.delete(entry)
     db.commit()
