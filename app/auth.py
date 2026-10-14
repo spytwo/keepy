@@ -1,18 +1,16 @@
-import os
 import secrets
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
-security = HTTPBasic()
+from settings import settings
 
-USERNAME = os.getenv("KEEPY_USER", "admin")
-PASSWORD = os.getenv("KEEPY_PASSWORD", "6455")
+security = HTTPBasic()
 
 
 def verify_credentials(credentials: HTTPBasicCredentials = Depends(security)):
-    correct_username = secrets.compare_digest(credentials.username, USERNAME)
-    correct_password = secrets.compare_digest(credentials.password, PASSWORD)
+    correct_username = secrets.compare_digest(credentials.username, settings.username)
+    correct_password = secrets.compare_digest(credentials.password, settings.password)
 
     if not (correct_username and correct_password):
         raise HTTPException(
